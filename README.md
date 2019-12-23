@@ -49,12 +49,17 @@
 
 ## NodeJS
 
-
-
-
-`javascript
+```javascript
 
 // on tracker ping:
+
+
+// fetch data from Redis - or stream
+
+
+
+
+
   // Check which jurisdiction the tracker is in
 
   // Check which jurisdiction tracker is registered in on-chain
@@ -69,14 +74,13 @@
     // Else:
       // Check if tracker is inside another jurisdiction
 
-`
-
+```
 
 
 
 ## Solidity
 
-`javascript
+```javascript
 
 contract Tracker {
 
@@ -171,13 +175,13 @@ contract Jurisdiction {
 contract JurisdictionRegistry {
 
 }
-`
+```
 
 
 
 ### DIDs
 
-`json
+```json
 
 // Tracker
 
@@ -214,14 +218,14 @@ contract JurisdictionRegistry {
 
 //
 
-`
+```
 
 
 
 
 ### Rust
 
-`rust
+```rust
 // In SGX enclave on the cloud:
 
 
@@ -246,4 +250,4 @@ function toBeChecked (_trackerId, _jurisdiction)
     return True;
   }
 }
-`
+```
