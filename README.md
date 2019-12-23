@@ -41,7 +41,7 @@
 ### Container
 
 ✅ Machine interface
-
+- Register ownership of device?
 
 
 
