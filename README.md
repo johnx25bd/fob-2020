@@ -6,11 +6,23 @@
 ## `./vehicle-registry/`
 
 Vessel owners sign up to participate.
-  - Register vessel DIDs
+  - Register vessel (i.e. pebble) DIDs
   - Stake funds (ETH, DAI, IOTEX) for each vessel
   - What do they get out of it?
     - `CleanCatch = True` (?) on fishing catch
   - *Graphical interface - form fill*
+
+### Requirements
+
+A web-based front end interface where a company representative will be able to:
+- Create (or import?) an IoTeX account, including prompts to back up keys.
+- Input relevant details for each vessel or vehicle they are registering. Mainly this will need to be an ID so we can connect the vehicle owner with the trusted data we're pulling from the S3 bucket.
+- Upon submission, this information is written to a blockchain for future access.
+- The user should be able to add vessels if they already have a record. This would be associated with their wallet address.
+  - How is it fetched? The `node-cloud` program will need to connect to the contract where this data is stored and *most likely* be able to fetch relevant details based on device identifier.
+  - This is where the funds are staked. When the vessel owner registers a new vessel they need to stake more funds.
+  - If funds are staked here some account needs to have authority to slash funds. This authority will likely construct the contract ...
+
 
 ## `./jurisdiction-registry/`
 Governments register MPA boundaries
