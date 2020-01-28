@@ -1,16 +1,41 @@
 
 
 
+# Interfaces:
+
+Vessel owners sign up to participate.
+  - Register vessel DIDs
+  - Stake funds (ETH, DAI, IOTEX) for each vessel
+  - What do they get out of it?
+    - `CleanCatch = True` (?) on fishing catch
+  - *Graphical interface - form fill*
+
+Governments register MPA boundaries
+  - Upload file with Geojson FeatureCollection - polygons of MPA boundaries.
+  - Arweave deploy (+ IPFS?) (https://medium.com/@arweave/arweave-ipfs-persistence-for-the-interplanetary-file-system-9f12981c36c3)
+  - Register IPFS address and / or arweave reference within smart contract (`SpatialRegistry.sol?`).
+  - *Graphical interface - form fill / file drop basically*
 
 
-## Externally-owned accounts:
+~~WHO?~~ Runs Cloud Node program
+
+  - Fetch current boundaries (query smart contract)
+  - Check for new data into S3 cloud bucket every minute
+  - Check to see if points are within MPA boundaries
+    - If TRUE:
+      - Submit transaction slashing that vessel's stake
+      - Set `bool CleanCatch = False` (?).
+  *This means that the Node service has private keys to sign tx. Who is administering this? Etc?*
+
+
+## Externally-owned accounts / Roles:
 
 ### Government
 
 #### Government Root Account
 
-- Jurisdiction boundaries
 - Constructs `Jurisdiction` contracts
+  - Registers boundaries
 - Registers and deregisters border officials
 
 ✅ Hard code registration  
