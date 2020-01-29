@@ -1,74 +1,61 @@
 pragma solidity ^0.5.12;
-// vvvv --- Completely unvalidated pseudocode --- vvvv
-
-contract VehicleRegistry {
-
-  struct Vehicle {
-    // Some struct to represent a vehicle
-    bytes32 DID; // bytes32?
-
-    int stake; // signed int enables vehicles to go into debt
-
-
-
-  }
-
-  address admin;
-  uint stake; // the amount required to stake to register a vehicle.
-
-  //
-  mapping (address => mapping(bytes32 => Vehicle)) public fleets;
-    // ^^ Each fleet owner address references a mapping of
-    //    Vehicle structs referenced by DID.
-
-
-  constructor (uint _stakeAmount) {
-    admin = msg.sender;
-
-    stakeAmount = _stakeAmount;
-
-  }
-
-
-  function registerVehicle (
-    _vehicleDID, // vehicle identifier - pebble DID
-
-    ) public payable {
-
-      require(msg.value >= stake);
-      // Check to see if vehicle is already registered?
-
-      Vehicle newVehicle = Vehicle(
-        _vehicleDID,
-        // address vehicleOwner, // don't need owner address due to structure of contract?
-
-        stake, // class variable - in this version each vehicle gets same amount of funds staked
-
-        )
-
-
-      fleets[msg.sender][_vehicleDID] = newVehicle;
-
-      // Questions:
-        // Can a user register an array of vehicles?
-        // ^^ Much more user friendly ...
-
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/math/SafeMath.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/ownership/Ownable.sol";
+contract VehicleRegistry is Ownable {
+    using SafeMath for uint256;
+    uint256 MIN_STAKE = 100;
+    uint256 SLASH_AMOUNT = 20;
+    struct stakeInfo {
+        uint256 expires;
+        uint256 amount;
+        bool exists;
     }
-
-    function registerMultipleVehicles (
-      // Vehicle[] _vehiclesToRegister, ...?
-      ) public payable {
-
-        // Make sure enough money is included:
-        require(msg.value > _vehiclesToRegister.length * stake);
-
-        // loop through array, calling registerVehicle(vehicle) for each element.
-          // Will this work calling a payable function within a payable function?
-
-
-      }
-
-
-
-
+    mapping(address => stakeInfo) stakeholders; // Maybe map from a DID instead of address?? But then how do we get that DID from the Pebble data?
+        // OR, it should be a 'parent DID', and inside stakeInfo we have the DIDs of each vehicle belonging to the parent. But how do we easily get the parent's iotex address?
+        // For first iteration, just map from address to a single vehicle, say each pebble has its own stake.
+    function lockCoins(uint256 lockAmount, uint8 lockTime) public payable {
+        require(lockAmount > MIN_STAKE, "You need to stake more than 100 tokens.");
+        stakeInfo storage userInfo = stakeholders[msg.sender];
+        userInfo.expires = block.timestamp + lockTime;
+        userInfo.amount = lockAmount;
+    }
+    function withdraw(uint256 withdrawAmount) public {
+        stakeInfo storage userInfo = stakeholders[msg.sender];
+        require(block.timestamp >= userInfo.expires, "You can't withdraw before your stake expiry date passes.");
+        require(address(this).balance > withdrawAmount);
+        userInfo.expires = 0;
+        userInfo.amount -= withdrawAmount;
+        msg.sender.transfer(withdrawAmount);
+    }
+    // After checking in node whether pebble is in polygon, if returns False, slash is called using the private key of the "central authority"
+    function slash(uint256 slashAmount, address toBeSlashed) public onlyOwner {
+        stakeInfo storage toBeSlashedInfo = stakeholders[toBeSlashed];
+        require(toBeSlashedInfo.expires > block.timestamp); // Don't slash if they aren't staking
+        toBeSlashedInfo.amount -= slashAmount;
+    }
+    function registerVehicle (uint256 stakeAmount) public payable {
+        require(!this.isStakeholder(msg.sender), "You are already registered");
+        require(stakeAmount >= MIN_STAKE);
+        stakeInfo memory newStakeInfo = stakeInfo(
+            0,
+            0,
+            true
+        );
+        stakeholders[msg.sender] = newStakeInfo; // or newVehicle
+        this.lockCoins(msg.value, 0);
+    }
+    function isStakeholder(address _address) public view returns (bool) {
+        return stakeholders[_address].exists;
+    }
+    function getStakeAmount(address _address) public view returns (uint256) {
+        return stakeholders[_address].amount;
+    }
+    function distributeRewards() public {
+        // Periodically redistribute slashed amounts to accounts that are operating well?
+        // Send most of it to the jurisdiction that has been imposed upon
+    }
+    // Extensions:
+    // Allow a single entity to have multiple vehicles associated with one stake
+    // Allow entity to register multiple vehicles in one transaction
+    // Add support for multiple stake methods, IOTX and ERC-20 tokens like DAI or our own token
 }
