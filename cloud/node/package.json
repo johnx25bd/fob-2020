@@ -1,0 +1,30 @@
+{
+  "name": "spatial-dapp-cloud",
+  "version": "1.0.0",
+  "description": "A node program to coordinate trusted sensor readings and smart contract invocation for LBL Labs' 2020 Future of Blockchain project",
+  "main": "app.js",
+  "dependencies": {
+    "request": "^2.88.0",
+    "requests": "^0.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LondonBlockchainLabs/fob-2020.git"
+  },
+  "keywords": [
+    "blockchain",
+    "spatial",
+    "trusted",
+    "iot"
+  ],
+  "author": "@LondonBlockchainLabs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LondonBlockchainLabs/fob-2020/issues"
+  },
+  "homepage": "https://github.com/LondonBlockchainLabs/fob-2020#readme"
+}

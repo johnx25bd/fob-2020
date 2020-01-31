@@ -14,6 +14,50 @@ Contracts to enable countries to register geometries representing restricted are
 #### Deployments:
 
 
+On the command line (with `arweave deploy` installed - (here)[https://docs.arweave.org/developers/tools/arweave-deploy]), calling:
+
+```bash
+arweave deploy ./exclusion-areas/paris.json --key-file ./path/to-arweave-keyfile.json --ipfs-publish
+```
+
+generated the following in the terminal window:
+
+```
+File
+
+Path: ./exclusion-areas/paris.json
+Size: 6.30 kB
+
+Transaction
+
+ID: EGbLOMIsqGNQ9BM_sHskfKWYVuqESM8tVwcoHx65Z1c
+Price: 0.000053963524 AR
+
+Tags:
+
+ - Content-Type:application/json
+ - User-Agent:ArweaveDeploy/1.8.2
+ - IPFS-Add:QmcGJotvEs25KFLyxe6Y2jiXZUBaYsqJZbDPWxYpdeJqND
+
+Wallet
+
+Address: J8FkWRWD438DPLclKzyjTB3zQFEvrcPAC-YroJsymjw
+Current balance: 1.000000000000 AR
+Balance after uploading: 0.999946036476 AR
+
+Carefully check the above details are correct, then Type CONFIRM to complete this upload CONFIRM
+Your file is deploying! 🚀
+Once your file is mined into a block it'll be available on the following URL
+
+https://arweave.net/EGbLOMIsqGNQ9BM_sHskfKWYVuqESM8tVwcoHx65Z1c
+
+https://ipfs.io/ipfs/QmcGJotvEs25KFLyxe6Y2jiXZUBaYsqJZbDPWxYpdeJqND
+
+You can check its status using 'arweave status EGbLOMIsqGNQ9BM_sHskfKWYVuqESM8tVwcoHx65Z1c'
+
+```
+
+
 | Exclusion Zone | Arweave URL | IPFS URL |
 | --- | --- | --- |
 | London | https://arweave.net/0KCazCF6ok3x37C9TThXCUpnq5jpYD7h-YYFUOcBHmw | https://ipfs.io/ipfs/QmdG9DLEP9ha9qHZYR7v8dYwFD9PkKSACoZZyZ6J52r6pr |
@@ -21,6 +65,26 @@ Contracts to enable countries to register geometries representing restricted are
 | Paris | https://arweave.net/EGbLOMIsqGNQ9BM_sHskfKWYVuqESM8tVwcoHx65Z1c | https://ipfs.io/ipfs/QmcGJotvEs25KFLyxe6Y2jiXZUBaYsqJZbDPWxYpdeJqND |
 
 
+Or, as a javascript object:
+
+```javascript
+
+var zones = {
+  london: {
+    arweave:"https://arweave.net/0KCazCF6ok3x37C9TThXCUpnq5jpYD7h-YYFUOcBHmw",
+    ipfs: "https://ipfs.io/ipfs/QmdG9DLEP9ha9qHZYR7v8dYwFD9PkKSACoZZyZ6J52r6pr"
+  },
+  berlin: {
+    arweave: "https://arweave.net/WHYZxyw_AL--zROiJlF_oMf2AQytiMgo5j3tTL-9JPU",
+    ipfs: "https://ipfs.io/ipfs/QmbsryEzoZhTK3GLJSz2Rp6BrNeLhs69XUEu1auvaFQv1Y"
+  },
+  paris: {
+    arweave: "https://arweave.net/EGbLOMIsqGNQ9BM_sHskfKWYVuqESM8tVwcoHx65Z1c",
+    ipfs: "https://ipfs.io/ipfs/QmcGJotvEs25KFLyxe6Y2jiXZUBaYsqJZbDPWxYpdeJqND"
+  }
+};
+
+```
 
 
 
