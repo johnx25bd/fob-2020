@@ -25,9 +25,6 @@ contract LBL_IoTeX_DID {
     event DeleteDID(string indexed didString);
 
     function createDID(string id, bytes32 hash, string uri, string imei) public {
-        if (bytes(id).length > 0) {
-            require(compareStrings(id, addrToString(msg.sender)), "id does not match creator");
-        }
         string memory resultDID = generateDIDString();
         require(!dids[resultDID].exist, "did already exists");
         if (bytes(imei).length > 0) {
