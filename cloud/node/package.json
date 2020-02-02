@@ -4,6 +4,7 @@
   "description": "A node program to coordinate trusted sensor readings and smart contract invocation for LBL Labs' 2020 Future of Blockchain project",
   "main": "app.js",
   "dependencies": {
+    "iotex-antenna": "^0.27.0",
     "request": "^2.88.0",
     "requests": "^0.3.0"
   },

@@ -1,61 +1,106 @@
-pragma solidity ^0.5.12;
+pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
+
 import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/math/SafeMath.sol";
 import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/ownership/Ownable.sol";
+
 contract VehicleRegistry is Ownable {
     using SafeMath for uint256;
     uint256 MIN_STAKE = 100;
     uint256 SLASH_AMOUNT = 20;
-    struct stakeInfo {
-        uint256 expires;
-        uint256 amount;
+
+    struct StakeInfo {
         bool exists;
+        uint256 unclaimedSlashRewards;
+        Vehicle[] vehicles;
     }
-    mapping(address => stakeInfo) stakeholders; // Maybe map from a DID instead of address?? But then how do we get that DID from the Pebble data?
-        // OR, it should be a 'parent DID', and inside stakeInfo we have the DIDs of each vehicle belonging to the parent. But how do we easily get the parent's iotex address?
-        // For first iteration, just map from address to a single vehicle, say each pebble has its own stake.
-    function lockCoins(uint256 lockAmount, uint8 lockTime) public payable {
+
+    struct Vehicle {
+        string id;
+        uint256 amount;
+        uint256 expires;
+    }
+
+    mapping(string => StakeInfo) stakeholders;
+
+    function lockCoins(string memory ownerDID, string memory vehicleDID, uint256 lockAmount, uint8 lockTime) public payable {
         require(lockAmount > MIN_STAKE, "You need to stake more than 100 tokens.");
-        stakeInfo storage userInfo = stakeholders[msg.sender];
-        userInfo.expires = block.timestamp + lockTime;
-        userInfo.amount = lockAmount;
+        StakeInfo storage userInfo = stakeholders[ownerDID];
+        if (compareStrings(userInfo.vehicles[userInfo.vehicles.length - 1].id, vehicleDID)) {
+            userInfo.vehicles[userInfo.vehicles.length - 1].expires = block.timestamp + lockTime * 1 minutes;
+            userInfo.vehicles[userInfo.vehicles.length - 1].amount = lockAmount;
+        } else {
+            revert("Could not lock coins, can't find correct vehicleDID");
+        }
     }
-    function withdraw(uint256 withdrawAmount) public {
-        stakeInfo storage userInfo = stakeholders[msg.sender];
-        require(block.timestamp >= userInfo.expires, "You can't withdraw before your stake expiry date passes.");
-        require(address(this).balance > withdrawAmount);
-        userInfo.expires = 0;
-        userInfo.amount -= withdrawAmount;
-        msg.sender.transfer(withdrawAmount);
+
+    function withdraw(string memory ownerDID, string memory vehicleDID, uint256 withdrawAmount) public {
+        StakeInfo storage userInfo = stakeholders[ownerDID];
+        for (uint i = 0; i < userInfo.vehicles.length; i++) {
+            if (compareStrings(userInfo.vehicles[i].id, vehicleDID)) {
+                require(block.timestamp >= userInfo.vehicles[i].expires, "You can't withdraw before your stake expiry date passes.");
+                require(address(this).balance > withdrawAmount);
+                userInfo.vehicles[i].expires = 0;
+                userInfo.vehicles[i].amount -= withdrawAmount;
+                msg.sender.transfer(withdrawAmount);
+                return;
+            }
+        }
+        revert("You do not own a vehicle with this DID");
     }
-    // After checking in node whether pebble is in polygon, if returns False, slash is called using the private key of the "central authority"
-    function slash(uint256 slashAmount, address toBeSlashed) public onlyOwner {
-        stakeInfo storage toBeSlashedInfo = stakeholders[toBeSlashed];
-        require(toBeSlashedInfo.expires > block.timestamp); // Don't slash if they aren't staking
-        toBeSlashedInfo.amount -= slashAmount;
+
+    function slash(uint256 slashAmount, string memory slashedOwnerDID, string memory slashedVehicleDID, string memory paidDID) public onlyOwner {
+        StakeInfo storage toBeSlashedInfo = stakeholders[slashedOwnerDID];
+        StakeInfo storage toBePaidInfo = stakeholders[paidDID];
+        for (uint i = 0; i < toBeSlashedInfo.vehicles.length; i++) {
+            if (compareStrings(toBeSlashedInfo.vehicles[i].id, slashedVehicleDID)) {
+                toBeSlashedInfo.vehicles[i].amount -= slashAmount;
+                toBePaidInfo.unclaimedSlashRewards += slashAmount;
+                return;
+            }
+        }
+        revert("Owner does not have a vehicle with provided DID");
     }
-    function registerVehicle (uint256 stakeAmount) public payable {
-        require(!this.isStakeholder(msg.sender), "You are already registered");
-        require(stakeAmount >= MIN_STAKE);
-        stakeInfo memory newStakeInfo = stakeInfo(
-            0,
-            0,
-            true
-        );
-        stakeholders[msg.sender] = newStakeInfo; // or newVehicle
-        this.lockCoins(msg.value, 0);
+
+
+    function registerVehicle (string memory ownerDID, string memory vehicleDID, uint8 lockTime) public payable {
+        require(msg.value >= MIN_STAKE, "You need to stake at least 100 wei");
+        if (!this.isStakeholder(ownerDID)) {
+            stakeholders[ownerDID].exists = true;
+            stakeholders[ownerDID].unclaimedSlashRewards = 0;
+        }
+        for (uint i = 0; i < stakeholders[ownerDID].vehicles.length; i++) {
+            require(!compareStrings(stakeholders[ownerDID].vehicles[i].id, vehicleDID), "This device is already registered!");
+        }
+
+        stakeholders[ownerDID].vehicles.push(Vehicle(vehicleDID, 0, 0));
+        this.lockCoins(ownerDID, vehicleDID, msg.value, lockTime);
     }
-    function isStakeholder(address _address) public view returns (bool) {
-        return stakeholders[_address].exists;
+
+    function isStakeholder(string memory ownerDID) public view returns (bool) {
+        return stakeholders[ownerDID].exists;
     }
-    function getStakeAmount(address _address) public view returns (uint256) {
-        return stakeholders[_address].amount;
+
+    function deleteStakeholder(string memory ownerDID) public {
+        stakeholders[ownerDID].exists = false;
     }
-    function distributeRewards() public {
-        // Periodically redistribute slashed amounts to accounts that are operating well?
-        // Send most of it to the jurisdiction that has been imposed upon
+
+    function getVehicles(string memory ownerDID) public view returns (string[] memory, uint256[] memory, uint256[] memory) {
+        string[] memory ids = new string[](stakeholders[ownerDID].vehicles.length);
+        uint256[] memory amounts = new uint256[](stakeholders[ownerDID].vehicles.length);
+        uint256[] memory expires = new uint256[](stakeholders[ownerDID].vehicles.length);
+
+        for (uint i = 0; i < stakeholders[ownerDID].vehicles.length; i++) {
+            Vehicle storage vehicle = stakeholders[ownerDID].vehicles[i];
+            ids[i] = vehicle.id;
+            amounts[i] = vehicle.amount;
+            expires[i] = vehicle.expires;
+        }
+        return (ids, amounts, expires);
     }
-    // Extensions:
-    // Allow a single entity to have multiple vehicles associated with one stake
-    // Allow entity to register multiple vehicles in one transaction
-    // Add support for multiple stake methods, IOTX and ERC-20 tokens like DAI or our own token
+
+    function compareStrings (string memory a, string memory b) internal pure returns (bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    }
+
 }
