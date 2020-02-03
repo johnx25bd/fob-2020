@@ -1,0 +1,346 @@
+body {
+  background-color: lightgrey;
+}
+
+svg {
+  position: relative;
+}
+
+h3 span {
+  font-size: 25px;
+  margin-left: 10%;
+}
+
+h3 span.light {
+  color: silver;
+}
+
+.header-span {
+  font-size: 25px;
+
+}
+
+.modal-dialog {
+  max-width: 100% !important;
+  margin: 0px;
+}
+
+.modal-content {
+  background-color: white;
+  cursor: default;
+  overflow: scroll;
+}
+
+#landing-content {
+  height: 80vh;
+  margin-top: 20vh;
+}
+
+#landing-content h1 {
+  opacity: 0.8;
+  font-size: 72px;
+  background: -webkit-linear-gradient(45deg, #eee,#d7d8d8, #717171);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#landing-content h1:hover {
+  opacity: 1;
+  transition: opacity .2s ease;
+  -moz-transition: opacity .2s ease;
+  -webkit-transition: opacity .5s ease;
+  -o-transition: opacity .2s ease;
+
+}
+
+#landing-content p {
+  font-size: 24px;
+  color: #949494;
+}
+
+#landing-content a {
+  color: #83acd8;
+}
+
+#landing-content button {
+  color: #83acd8;
+  border-color: #83acd8;
+}
+
+#landing-content button:hover {
+  color: white;
+  background-color:  #83acd8;
+}
+
+#landing-text.visible {
+  opacity: 1 !important;
+}
+
+#ucl-logo {
+  left: none !important;
+  right: none !important;
+}
+
+.feature-subheader {
+  font-size: 20px;
+  color: silver;
+}
+
+.feature .static-satellite {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.airport-coords {
+  margin-top: -20px;
+  margin-left: 0px;
+}
+
+.pie-chart-holder path {
+  fill-opacity: 0.7;
+}
+
+.pie-chart-holder path:hover {
+  fill-opacity: 1;
+}
+
+.airport-code {
+  margin-top: -25px;
+}
+
+#navbar-title {
+  cursor: pointer;
+  font-size: 25px;
+  background: -webkit-linear-gradient(45deg, #eee,#d7d8d8, #717171);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.octicon {
+  fill: white;
+}
+
+.octicon:hover {
+  fill: lightgrey;
+}
+
+.sticky-top {
+  top: 63px !important;
+}
+
+#app-nav {
+  /* top: 63px !important ; */
+  height: 70px;
+  background-color: white;
+  /* margin-left: -15px;
+  margin-right: -15px; */
+  -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+}
+
+#file-add {
+  /* top: 63px !important ; */
+  background-color: white;
+  /* margin-left: -15px;
+  margin-right: -15px; */
+  -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+}
+
+
+
+#drop-zone {
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  /* font: 20pt bold; */
+  color: #bbb;
+}
+
+.loaded-layer-toggle {
+  opacity: 0.7;
+  border: solid 2px;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.loaded-layer-toggle:hover {
+  opacity: 1.0;
+}
+
+.loaded-layer-toggle.point {
+  border-radius: 50%;
+}
+
+.loaded-layer-toggle.line {
+  border: none !important;
+
+}
+
+
+.loaded-layer-toggle:not(.active) {
+  background-color: lightgrey !important;
+}
+
+.loaded-layer-toggle.line:not(.active) {
+  background: linear-gradient(to bottom right, white 40%, lightgrey 40%, lightgrey 60%, white 60%) !important;
+}
+
+#loaded-list p {
+  cursor: default;
+}
+
+#app-nav div {
+  height: 70px;
+  cursor: pointer;
+}
+
+#app-nav div:hover {
+  background-color: grey;
+}
+
+#app-nav div p {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+#app-nav .active {
+  background-color: lightgrey;
+}
+
+#app-nav .clicking {
+  background-color: lightgrey !important;
+}
+
+#app-cards svg {
+  width: 100%;
+}
+.title{
+  font-size: 18px;
+  font-weight: bold;
+}
+.bar {
+  fill: #537895;
+}
+
+.bar:hover {
+  opacity: 1;
+}
+
+#imports-bar-chart .bar {
+  fill: #d95f0e;
+}
+
+#top-five-ports-bar-chart .bar {
+  fill: #d95f0e;
+}
+
+.story-nav-btns {
+
+}
+.textLegend:hover{
+  font-weight: bold;
+}
+.mapbox-popup p {
+  margin-bottom: 0rem !important;
+}
+
+.app-card {
+
+  height: auto;
+  background-color: lightgrey;
+  color: grey;
+  margin-bottom: 25px;
+  /* border-bottom: 1px solid grey; */
+  /* border-radius: 10px; */
+  padding: 25px;
+  /* border: 1px solid black; */
+
+  /* Generated with https://www.cssmatic.com/box-shadow */
+  -webkit-box-shadow: 3px 2px 10px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 3px 2px 10px 0px rgba(0,0,0,0.5);
+  box-shadow: 3px 2px 10px 0px rgba(0,0,0,0.5);
+
+
+}
+
+.app-card:not(.active) .card {
+  background-color: lightgrey;
+
+}
+
+.app-card.active {
+
+  background-color: white;
+  color: black;
+}
+
+.legend {
+  /* height: 100px; */
+  margin-bottom: 40px;
+  background-color: none;
+}
+
+.sources text {
+  fill: #83acd8;
+
+}
+
+.sources text:hover {
+  text-decoration: underline;
+}
+
+.legend-content {
+
+}
+
+.feature {
+  background-color: none;
+}
+
+.feature-content {
+
+}
+
+
+/* Navbar */
+#mode-buttons {
+  margin-right: 19%
+}
+
+#main-container {
+  margin-top: 56px;
+  height: 100%;
+  /* background-color: green; */
+}
+
+#main-map {
+  height: calc(100% - 55px);
+  /* width: 900px; */
+  position: fixed;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+
+
+#info-body {
+  /* background-color: yellow; */
+  /* margin-top: 25px;
+  margin-right: 2%; */
+}
+
+#map-nav {
+  background-color: lightgreen;
+}
+
+#cards {
+  /* background-color: white; */
+}
