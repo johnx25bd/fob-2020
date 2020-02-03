@@ -1,5 +1,10 @@
 # Jurisdiction Registry
 
+Governments register MPA boundaries
+  - Upload file with Geojson FeatureCollection - polygons of MPA boundaries.
+  - Arweave deploy (+ IPFS?) (https://medium.com/@arweave/arweave-ipfs-persistence-for-the-interplanetary-file-system-9f12981c36c3)
+  - Register IPFS address and / or arweave reference within smart contract (`JurisdictionRegistry.sol?`).
+  - *Graphical interface - form fill / file drop basically*
 
 ## Development Plan
 
