@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>vehicle_registration</title>
+</head>
+
+<body>
+
+    <h3>vehicle registration</h3>
+    <form action="" method="POST">
+        <label for="address">IOTEX address</label>
+        <input id="address" type="text" name="address">
+        <br>
+        <label for="privateKey">IOTEX private key</label>
+        <input id="privateKey" type="text" name="privateKey">
+        <br>
+        <label for="entity">Entity</label>
+        <select id="entity" name="entity">
+            <option value="individual">individual</option>
+            <option value="device">device</option>
+            <option value="company">company</option>
+        </select>
+
+        <br>
+        <label id="companyLabel" for="company">comany name</label>
+        <input id="company" type="text" name="company">
+
+        <br>
+        <label id="imeiLable" for="imei">Pebble tracker's imei</label>
+        <input id="imei" type="text" name="imei">
+        <br>
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+<script>
+    $("#company").hide();
+    $("#companyLabel").hide();
+    // $("#imei").hide();
+    // $("#imeiLable").hide();
+    // $("#entity").change(() => {
+    //     let val = $("#entity option:selected").attr('value');
+    //     switch (val) {
+    //         case "device":
+    //             $("#imei").show();
+    //             $("#imeiLable").show();
+    //             break;
+    //         case "company":
+    //             $("#company").show();
+    //             $("#companyLabel").show();
+    //             break;
+    //         case "individual":
+    //             $("#company").hide();
+    //             $("#companyLabel").hide();
+    //             $("#imei").hide();
+    //             $("#imeiLable").hide();
+    //             break;
+    //     }
+    // });
+</script>
+
+</html>
